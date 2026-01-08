@@ -9,7 +9,6 @@ defmodule ShortcutDemo.Application do
   def start(_type, _args) do
     children = [
       ShortcutDemoWeb.Telemetry,
-      ShortcutDemo.Repo,
       {DNSCluster, query: Application.get_env(:shortcut_demo, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: ShortcutDemo.PubSub},
       # Start a worker by calling: ShortcutDemo.Worker.start_link(arg)

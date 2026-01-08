@@ -7,10 +7,6 @@
 # General application configuration
 import Config
 
-config :shortcut_demo,
-  ecto_repos: [ShortcutDemo.Repo],
-  generators: [timestamp_type: :utc_datetime]
-
 # Configure the endpoint
 config :shortcut_demo, ShortcutDemoWeb.Endpoint,
   url: [host: "localhost"],
