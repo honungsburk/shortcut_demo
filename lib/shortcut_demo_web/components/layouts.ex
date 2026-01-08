@@ -58,6 +58,8 @@ defmodule ShortcutDemoWeb.Layouts do
     </main>
 
     <.flash_group flash={@flash} />
+
+    <div id="shortcut-hook" phx-hook="ShortcutHook" phx-update="ignore" style="display: none;"></div>
     """
   end
 

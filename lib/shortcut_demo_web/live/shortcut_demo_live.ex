@@ -1,5 +1,18 @@
 defmodule ShortcutDemoWeb.ShortcutDemoLive do
   use ShortcutDemoWeb, :live_view
+  import ShortcutDemoWeb.Live.ShortcutHandler
+  import Logger
+
+  def mount(_params, _session, socket) do
+    {:ok, assign(socket, :show_command_palette, false)}
+  end
+
+  handle_event_shortcuts()
+
+  def handle_event(event, _params, socket) do
+    Logger.warning("Unknown shortcut event: #{inspect(event)}")
+    {:noreply, socket}
+  end
 
   def render(assigns) do
     ~H"""
@@ -31,11 +44,10 @@ defmodule ShortcutDemoWeb.ShortcutDemoLive do
     """
   end
 
-  def command_palette(assigns) do
-    ~H"""
-    <div>
-      <h1>Command Palette</h1>
-    </div>
-    """
-  end
+  #   <.live_component
+  #   :if={@show_command_palette}
+  #   module={ShortcutDemoWeb.Live.CommandPalette}
+  #   id="command-palette"
+  #   show={@show_command_palette}
+  # />
 end

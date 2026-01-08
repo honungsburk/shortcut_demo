@@ -14,10 +14,12 @@ defmodule ShortcutDemoWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", ShortcutDemoWeb do
-    pipe_through :browser
+  live_session :default, on_mount: [{ShortcutDemoWeb.Live.Hooks.AttachShortcuts, :default}] do
+    scope "/", ShortcutDemoWeb do
+      pipe_through :browser
 
-    live "/", ShortcutDemoLive, :index
+      live "/", ShortcutDemoLive, :index
+    end
   end
 
   # Other scopes may use custom stacks.
