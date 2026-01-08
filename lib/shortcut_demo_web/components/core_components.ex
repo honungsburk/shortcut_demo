@@ -445,6 +445,23 @@ defmodule ShortcutDemoWeb.CoreComponents do
     """
   end
 
+  @doc """
+  Renders keyboard shortcut keys.
+
+  ## Examples
+
+      <.shortcut keys={["Ctrl", "K"]} />
+      <.shortcut keys={["/"]} />
+  """
+  attr :keys, :list, required: true, doc: "list of key names to display"
+  attr :class, :any, default: nil, doc: "additional CSS classes for kbd elements"
+
+  def shortcut(assigns) do
+    ~H"""
+    <kbd :for={key <- @keys} class={["kbd kbd-lg mr-2", @class]}>{key}</kbd>
+    """
+  end
+
   ## JS Commands
 
   def show(js \\ %JS{}, selector) do

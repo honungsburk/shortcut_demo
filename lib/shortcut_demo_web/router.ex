@@ -17,7 +17,7 @@ defmodule ShortcutDemoWeb.Router do
   scope "/", ShortcutDemoWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live "/", ShortcutDemoLive, :index
   end
 
   # Other scopes may use custom stacks.
