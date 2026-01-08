@@ -6,7 +6,6 @@ defmodule ShortcutDemoWeb.Components.HelpModal do
 
   import ShortcutDemoWeb.CoreComponents
 
-  alias Phoenix.LiveView.JS
   alias ShortcutDemo.Shortcuts
 
   attr :on_close, :any, required: true, doc: "JS command or event to close the modal"

@@ -56,11 +56,4 @@ defmodule ShortcutDemoWeb.ShortcutDemoLive do
     </Layouts.app>
     """
   end
-
-  #   <.live_component
-  #   :if={@show_command_palette}
-  #   module={ShortcutDemoWeb.Live.CommandPalette}
-  #   id="command-palette"
-  #   show={@show_command_palette}
-  # />
 end
