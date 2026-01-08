@@ -18,7 +18,7 @@ defmodule ShortcutDemoWeb.Live.ShortcutHandler do
       end
   """
   import Phoenix.LiveView, only: [put_flash: 3]
-  import Phoenix.Socket, only: [assign: 3]
+  import Phoenix.Component, only: [assign: 3]
   import Logger
 
   @doc """
@@ -71,7 +71,7 @@ defmodule ShortcutDemoWeb.Live.ShortcutHandler do
   end
 
   defp handle_action(:show_help, socket) do
-    socket
+    assign(socket, :modal, :help)
   end
 
   defp handle_action(unknown, socket) do

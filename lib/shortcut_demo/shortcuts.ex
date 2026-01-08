@@ -49,7 +49,8 @@ defmodule ShortcutDemo.Shortcuts do
     },
     %{
       shortcuts: [
-        %{key: "?"}
+        %{modifiers: [:ctrl], key: "h"},
+        %{modifiers: [:meta], key: "h"}
       ],
       action_id: :show_help,
       description: "Show keyboard shortcut help",

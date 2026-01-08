@@ -5,6 +5,8 @@ defmodule ShortcutDemoWeb.Layouts do
   """
   use ShortcutDemoWeb, :html
 
+  import ShortcutDemoWeb.Components.HelpModal
+
   # Embed all files in layouts/* within this module.
   # The default root.html.heex file contains the HTML
   # skeleton of your application, namely HTML headers
@@ -30,6 +32,8 @@ defmodule ShortcutDemoWeb.Layouts do
   attr :current_scope, :map,
     default: nil,
     doc: "the current [scope](https://hexdocs.pm/phoenix/scopes.html)"
+
+  attr :modal, :atom, default: nil, doc: "the current modal to display"
 
   slot :inner_block, required: true
 
@@ -60,6 +64,11 @@ defmodule ShortcutDemoWeb.Layouts do
     <.flash_group flash={@flash} />
 
     <div id="shortcut-hook" phx-hook="ShortcutHook" phx-update="ignore" style="display: none;"></div>
+
+    <.help_modal
+      :if={@modal == :help}
+      on_close={JS.push("close_modal")}
+    />
     """
   end
 

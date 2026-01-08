@@ -4,10 +4,14 @@ defmodule ShortcutDemoWeb.ShortcutDemoLive do
   import Logger
 
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, :show_command_palette, false)}
+    {:ok, assign(socket, modal: nil, show_command_palette: false)}
   end
 
   handle_event_shortcuts()
+
+  def handle_event("close_modal", _params, socket) do
+    {:noreply, assign(socket, modal: nil)}
+  end
 
   def handle_event(event, _params, socket) do
     Logger.warning("Unknown shortcut event: #{inspect(event)}")
@@ -16,7 +20,7 @@ defmodule ShortcutDemoWeb.ShortcutDemoLive do
 
   def render(assigns) do
     ~H"""
-    <Layouts.app flash={@flash}>
+    <Layouts.app flash={@flash} modal={@modal}>
       <div class="flex flex-col items-center justify-center text-center mt-20">
         <h1 class="text-5xl font-bold mb-2">Shortcut Demo</h1>
         <p class="text-xl text-base-content/70 mb-8">
