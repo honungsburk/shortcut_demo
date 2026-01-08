@@ -69,6 +69,12 @@ defmodule ShortcutDemoWeb.Layouts do
       :if={@modal == :help}
       on_close={JS.push("close_modal")}
     />
+
+    <.live_component
+      :if={@modal == :command_palette}
+      module={ShortcutDemoWeb.Components.Live.CommandPalette}
+      id="command-palette"
+    />
     """
   end
 

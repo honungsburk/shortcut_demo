@@ -52,29 +52,29 @@ defmodule ShortcutDemoWeb.Live.ShortcutHandler do
 
   # Implement all keyboard actions here
 
-  defp handle_action(:open_command_palette, socket) do
+  def handle_action(:open_command_palette, socket) do
     assign(socket, :modal, :command_palette)
   end
 
-  defp handle_action(:close_modals, socket) do
+  def handle_action(:close_modals, socket) do
     assign(socket, :modal, nil)
   end
 
-  defp handle_action(:flash_success, socket) do
+  def handle_action(:flash_success, socket) do
     socket
     |> put_flash(:info, "Success!")
   end
 
-  defp handle_action(:flash_error, socket) do
+  def handle_action(:flash_error, socket) do
     socket
     |> put_flash(:error, "Error!")
   end
 
-  defp handle_action(:show_help, socket) do
+  def handle_action(:show_help, socket) do
     assign(socket, :modal, :help)
   end
 
-  defp handle_action(unknown, socket) do
+  def handle_action(unknown, socket) do
     Logger.warning("Unknown shortcut: #{inspect(unknown)}")
     socket
   end

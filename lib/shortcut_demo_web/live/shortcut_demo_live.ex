@@ -4,7 +4,7 @@ defmodule ShortcutDemoWeb.ShortcutDemoLive do
   import Logger
 
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, modal: nil, show_command_palette: false)}
+    {:ok, assign(socket, modal: nil)}
   end
 
   handle_event_shortcuts()
@@ -16,6 +16,19 @@ defmodule ShortcutDemoWeb.ShortcutDemoLive do
   def handle_event(event, _params, socket) do
     Logger.warning("Unknown shortcut event: #{inspect(event)}")
     {:noreply, socket}
+  end
+
+  def handle_info({:execute_action, action_id}, socket) do
+    socket =
+      socket
+      |> assign(:modal, nil)
+
+    socket = ShortcutDemoWeb.Live.ShortcutHandler.handle_action(action_id, socket)
+    {:noreply, socket}
+  end
+
+  def handle_info(:close_command_palette, socket) do
+    {:noreply, assign(socket, modal: nil)}
   end
 
   def render(assigns) do
@@ -32,11 +45,7 @@ defmodule ShortcutDemoWeb.ShortcutDemoLive do
             <span class="ml-2 text-base">Open command palette</span>
           </div>
           <div class="bg-base-200 p-4 rounded-lg">
-            <.shortcut keys={["/"]} />
-            <span class="ml-2 text-base">Focus search</span>
-          </div>
-          <div class="bg-base-200 p-4 rounded-lg">
-            <.shortcut keys={["?"]} />
+            <.shortcut keys={["h"]} />
             <span class="ml-2 text-base">Show keyboard shortcut help</span>
           </div>
         </div>
