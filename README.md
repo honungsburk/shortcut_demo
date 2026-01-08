@@ -12,4 +12,5 @@ Small Repo to explore how to implement shortcuts and a command palette using pho
 
 ## Notes
 
-There is a bug so when you tro to execute an action via the command palette and use enter key it doesn't work. But if you click on one it does and after that the enter key starts working. 
+- There is a bug so when you execute an action via the command palette and use enter key it doesn't work. But if you click on one it does and after that the enter key starts working. 
+- another bug is that command palette autofocus on input only works the first time. After that it no longer autofocuses.
