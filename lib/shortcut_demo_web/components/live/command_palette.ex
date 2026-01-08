@@ -8,12 +8,15 @@ defmodule ShortcutDemoWeb.Components.Live.CommandPalette do
     shortcuts = Shortcuts.all()
     search_query = assigns[:search_query] || ""
 
+    filtered = filtered_shortcuts(shortcuts, search_query)
+
     socket =
       socket
       |> assign(assigns)
       |> assign(:shortcuts, shortcuts)
       |> assign(:search_query, search_query)
-      |> assign(:filtered_shortcuts, filtered_shortcuts(shortcuts, search_query))
+      |> assign(:filtered_shortcuts, filtered)
+      |> assign(:selected_index, if(filtered == [], do: nil, else: 0))
 
     {:ok, socket}
   end
@@ -24,7 +27,8 @@ defmodule ShortcutDemoWeb.Components.Live.CommandPalette do
     {:noreply,
      socket
      |> assign(:search_query, search_query)
-     |> assign(:filtered_shortcuts, filtered)}
+     |> assign(:filtered_shortcuts, filtered)
+     |> assign(:selected_index, if(filtered == [], do: nil, else: 0))}
   end
 
   def handle_event("execute_action", %{"action_id" => action_id}, socket) do
@@ -37,16 +41,59 @@ defmodule ShortcutDemoWeb.Components.Live.CommandPalette do
     {:noreply, socket}
   end
 
+  def handle_event("key-event", %{"key" => key}, socket) do
+    case key do
+      "Escape" ->
+        send(self(), :close_command_palette)
+
+      "Enter" ->
+        index = socket.assigns.selected_index || 0
+
+        case Enum.at(socket.assigns.filtered_shortcuts, index) do
+          nil ->
+            {:noreply, socket}
+
+          shortcut_spec ->
+            IO.inspect(shortcut_spec, label: "shortcut_spec")
+            send(self(), {:execute_action, shortcut_spec.action_id})
+            {:noreply, socket}
+        end
+
+      key when key in ["ArrowDown", "ArrowUp"] ->
+        filtered_count = length(socket.assigns.filtered_shortcuts)
+
+        if filtered_count == 0 do
+          {:noreply, assign(socket, :selected_index, nil)}
+        else
+          new_index =
+            case key do
+              "ArrowDown" ->
+                current = socket.assigns.selected_index || -1
+                if current >= filtered_count - 1, do: 0, else: current + 1
+
+              "ArrowUp" ->
+                current = socket.assigns.selected_index || 0
+                if current <= 0, do: filtered_count - 1, else: current - 1
+            end
+
+          {:noreply, assign(socket, :selected_index, new_index)}
+        end
+
+      _ ->
+        {:noreply, socket}
+    end
+  end
+
   def render(assigns) do
     ~H"""
     <div
       id="command-palette"
       class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
-      phx-key="escape"
-      phx-window-keydown="close"
-      phx-key-target={@myself}
+      phx-target={@myself}
     >
       <div
+        phx-window-keydown="key-event"
+        id="command-palette-container"
         class="bg-base-100 rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[80vh] overflow-hidden flex flex-col"
         phx-click-away="close"
         phx-target={@myself}
@@ -67,21 +114,28 @@ defmodule ShortcutDemoWeb.Components.Live.CommandPalette do
               id="command-palette-search"
               name="search"
               value={@search_query}
+              autofocus
               placeholder="Search commands..."
               class="w-full pl-10 pr-4 py-3 bg-base-200 border border-base-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-              autofocus
             />
           </form>
         </div>
 
         <div class="overflow-y-auto p-2" id="command-palette-results">
           <div
-            :for={shortcut_spec <- @filtered_shortcuts}
-            class="flex items-center justify-between p-3 rounded-lg hover:bg-base-200 transition-colors cursor-pointer group"
+            :for={{shortcut_spec, index} <- Enum.with_index(@filtered_shortcuts)}
+            class={[
+              "flex items-center justify-between p-3 rounded-lg transition-colors cursor-pointer group",
+              if(@selected_index == index,
+                do: "bg-primary/20 border border-primary/50",
+                else: "hover:bg-base-200"
+              )
+            ]}
             phx-click="execute_action"
             phx-target={@myself}
             phx-value-action_id={shortcut_spec.action_id}
             data-action-id={shortcut_spec.action_id}
+            data-index={index}
           >
             <div class="flex-1">
               <div class="font-medium text-base">{shortcut_spec.description}</div>
