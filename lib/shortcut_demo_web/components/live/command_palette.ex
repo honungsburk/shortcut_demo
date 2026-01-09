@@ -9,13 +9,14 @@ defmodule ShortcutDemoWeb.Components.Live.CommandPalette do
     search_query = assigns[:search_query] || ""
 
     filtered = filtered_shortcuts(shortcuts, search_query)
+    filtered_in_palette = Enum.filter(filtered, & &1.in_palette?)
 
     socket =
       socket
       |> assign(assigns)
       |> assign(:shortcuts, shortcuts)
       |> assign(:search_query, search_query)
-      |> assign(:filtered_shortcuts, filtered)
+      |> assign(:filtered_shortcuts, filtered_in_palette)
       |> assign(:selected_index, if(filtered == [], do: nil, else: 0))
 
     {:ok, socket}

@@ -16,7 +16,8 @@ defmodule ShortcutDemo.Shortcuts do
           shortcuts: [shortcut()],
           action_id: action_id(),
           description: String.t(),
-          category: atom()
+          category: atom(),
+          in_palette?: boolean()
         }
 
   @shortcuts [
@@ -27,7 +28,8 @@ defmodule ShortcutDemo.Shortcuts do
       ],
       action_id: :open_command_palette,
       description: "Open command palette",
-      category: :navigation
+      category: :navigation,
+      in_palette?: false
     },
     %{
       shortcuts: [
@@ -36,7 +38,8 @@ defmodule ShortcutDemo.Shortcuts do
       ],
       action_id: :flash_success,
       description: "Flash success",
-      category: :feedback
+      category: :feedback,
+      in_palette?: true
     },
     %{
       shortcuts: [
@@ -45,7 +48,8 @@ defmodule ShortcutDemo.Shortcuts do
       ],
       action_id: :flash_error,
       description: "Flash error",
-      category: :feedback
+      category: :feedback,
+      in_palette?: true
     },
     %{
       shortcuts: [
@@ -54,7 +58,8 @@ defmodule ShortcutDemo.Shortcuts do
       ],
       action_id: :show_help,
       description: "Show keyboard shortcut help",
-      category: :help
+      category: :help,
+      in_palette?: true
     }
   ]
 
