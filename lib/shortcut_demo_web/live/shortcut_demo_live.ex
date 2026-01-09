@@ -1,25 +1,22 @@
 defmodule ShortcutDemoWeb.ShortcutDemoLive do
   use ShortcutDemoWeb, :live_view
-  use ShortcutDemoWeb.Live.ShortcutHandler
-  import ShortcutDemoWeb.Live.ShortcutHandler
+  alias ShortcutDemoWeb.Live.ShortcutHandler
   import Logger
 
   def mount(_params, _session, socket) do
     {:ok, assign(socket, modal: nil)}
   end
 
-  handle_event_shortcuts()
-
   def handle_event("close_modal", _params, socket) do
     {:noreply, assign(socket, modal: nil)}
   end
 
   def handle_event(event, params, socket) do
-    super(event, params, socket)
+    ShortcutHandler.handle_event(event, params, socket)
   end
 
   def handle_info(action_id, socket) do
-    super(action_id, socket)
+    ShortcutHandler.handle_info(action_id, socket)
   end
 
   def render(assigns) do

@@ -22,55 +22,24 @@ defmodule ShortcutDemoWeb.Live.ShortcutHandler do
   import Logger
 
   @doc """
-  Implements the handle_event/3 and handle_info/2 callbacks to handle keyboard shortcut events.
+  Implements the default handle_event/3 to handle keyboard shortcut events.
 
-  ## Examples
-
-      defmodule MyAppWeb.MyLive do
-        use MyAppWeb, :live_view
-        use MyAppWeb.Live.ShortcutHandler
-
-        def handle_event(action, args, socket) do
-          super(action, args, socket)
-        end
-
-        def handle_info(action, socket) do
-          super(action, socket)
-        end
-      end
   """
-  defmacro __using__(_opts) do
-    quote do
-      def handle_event("shortcut", %{"action_id" => action_id}, socket) do
-        ShortcutDemoWeb.Live.ShortcutHandler.handle_event(action_id, socket)
-      end
-
-      defoverridable handle_event: 3
-
-      def handle_info({:execute_action, action_id}, socket) do
-        socket =
-          ShortcutDemoWeb.Live.ShortcutHandler.handle_action(action_id, socket)
-          |> Phoenix.Component.assign(:modal, nil)
-
-        {:noreply, socket}
-      end
-
-      defoverridable handle_info: 2
-    end
+  def handle_event("shortcut", %{"action_id" => action_id}, socket) do
+    ShortcutDemoWeb.Live.ShortcutHandler.handle_event(action_id, socket)
   end
 
   @doc """
-  implements the handle_event/3 callback to handle keyboard shortcut events.
-
-  Instead of implementing the handle_event/3 callback yourself,
-  you can use this macro to automatically handle keyboard shortcut events.
+  Handles the default handle_info/2 callback to handle keyboard shortcut events.
   """
-  defmacro handle_event_shortcuts() do
-    quote do
-      def handle_event("shortcut", %{"action_id" => action_id}, socket) do
-        ShortcutDemoWeb.Live.ShortcutHandler.handle_event(action_id, socket)
-      end
-    end
+  def handle_info(:close_command_palette, socket) do
+    {:noreply, Phoenix.Component.assign(socket, :modal, nil)}
+  end
+
+  def handle_info({:execute_action, action_id}, socket) do
+    socket = Phoenix.Component.assign(socket, :modal, nil)
+    socket = ShortcutDemoWeb.Live.ShortcutHandler.handle_action(action_id, socket)
+    {:noreply, socket}
   end
 
   @doc """
