@@ -9,3 +9,6 @@ Small Repo to explore how to implement shortcuts and a command palette using pho
 - https://github.com/elixir-saas/command_k/blob/master/lib/command_k.ex
 - https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent
 
+## TODO
+
+- refactor global state to be in its own live_component. It can then easily be shared between pages.
