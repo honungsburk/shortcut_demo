@@ -173,6 +173,12 @@ defmodule ShortcutDemoWeb.Components.Live.CommandPalette do
             const searchInput = document.getElementById("command-palette-search");
             if (searchInput) {
               searchInput.focus();
+              // prevent enter key from submitting the input form
+              searchInput.addEventListener("keydown", (e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                }
+              });
             }
           }
         }
