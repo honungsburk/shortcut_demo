@@ -90,6 +90,7 @@ defmodule ShortcutDemoWeb.Components.Live.CommandPalette do
       id="command-palette"
       class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
       phx-target={@myself}
+      phx-hook=".FocusSearch"
     >
       <div
         phx-window-keydown="key-event"
@@ -114,7 +115,6 @@ defmodule ShortcutDemoWeb.Components.Live.CommandPalette do
               id="command-palette-search"
               name="search"
               value={@search_query}
-              autofocus
               placeholder="Search commands..."
               class="w-full pl-10 pr-4 py-3 bg-base-200 border border-base-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
             />
@@ -166,6 +166,17 @@ defmodule ShortcutDemoWeb.Components.Live.CommandPalette do
           </div>
         </div>
       </div>
+
+      <script :type={Phoenix.LiveView.ColocatedHook} name=".FocusSearch">
+        export default {
+          mounted() {
+            const searchInput = document.getElementById("command-palette-search");
+            if (searchInput) {
+              searchInput.focus();
+            }
+          }
+        }
+      </script>
     </div>
     """
   end
