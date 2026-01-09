@@ -45,6 +45,7 @@ defmodule ShortcutDemoWeb.Components.Live.CommandPalette do
     case key do
       "Escape" ->
         send(self(), :close_command_palette)
+        {:noreply, socket}
 
       "Enter" ->
         index = socket.assigns.selected_index || 0
@@ -54,7 +55,6 @@ defmodule ShortcutDemoWeb.Components.Live.CommandPalette do
             {:noreply, socket}
 
           shortcut_spec ->
-            IO.inspect(shortcut_spec, label: "shortcut_spec")
             send(self(), {:execute_action, shortcut_spec.action_id})
             {:noreply, socket}
         end

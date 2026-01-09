@@ -22,6 +22,44 @@ defmodule ShortcutDemoWeb.Live.ShortcutHandler do
   import Logger
 
   @doc """
+  Implements the handle_event/3 and handle_info/2 callbacks to handle keyboard shortcut events.
+
+  ## Examples
+
+      defmodule MyAppWeb.MyLive do
+        use MyAppWeb, :live_view
+        use MyAppWeb.Live.ShortcutHandler
+
+        def handle_event(action, args, socket) do
+          super(action, args, socket)
+        end
+
+        def handle_info(action, socket) do
+          super(action, socket)
+        end
+      end
+  """
+  defmacro __using__(_opts) do
+    quote do
+      def handle_event("shortcut", %{"action_id" => action_id}, socket) do
+        ShortcutDemoWeb.Live.ShortcutHandler.handle_event(action_id, socket)
+      end
+
+      defoverridable handle_event: 3
+
+      def handle_info({:execute_action, action_id}, socket) do
+        socket =
+          ShortcutDemoWeb.Live.ShortcutHandler.handle_action(action_id, socket)
+          |> Phoenix.Component.assign(:modal, nil)
+
+        {:noreply, socket}
+      end
+
+      defoverridable handle_info: 2
+    end
+  end
+
+  @doc """
   implements the handle_event/3 callback to handle keyboard shortcut events.
 
   Instead of implementing the handle_event/3 callback yourself,

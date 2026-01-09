@@ -1,5 +1,6 @@
 defmodule ShortcutDemoWeb.ShortcutDemoLive do
   use ShortcutDemoWeb, :live_view
+  use ShortcutDemoWeb.Live.ShortcutHandler
   import ShortcutDemoWeb.Live.ShortcutHandler
   import Logger
 
@@ -13,22 +14,12 @@ defmodule ShortcutDemoWeb.ShortcutDemoLive do
     {:noreply, assign(socket, modal: nil)}
   end
 
-  def handle_event(event, _params, socket) do
-    Logger.warning("Unknown shortcut event: #{inspect(event)}")
-    {:noreply, socket}
+  def handle_event(event, params, socket) do
+    super(event, params, socket)
   end
 
-  def handle_info({:execute_action, action_id}, socket) do
-    socket =
-      socket
-      |> assign(:modal, nil)
-
-    socket = ShortcutDemoWeb.Live.ShortcutHandler.handle_action(action_id, socket)
-    {:noreply, socket}
-  end
-
-  def handle_info(:close_command_palette, socket) do
-    {:noreply, assign(socket, modal: nil)}
+  def handle_info(action_id, socket) do
+    super(action_id, socket)
   end
 
   def render(assigns) do
